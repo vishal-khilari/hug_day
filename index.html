@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Hug Day 💗</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Quicksand:wght@400;500;600&display=swap"
@@ -13,6 +16,19 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        overflow: hidden;
+        overscroll-behavior: none;
       }
 
       body {
@@ -23,13 +39,11 @@
           #ffe8f0 50%,
           #fff0f5 100%
         );
-        min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
-        overflow: hidden;
         position: relative;
-        touch-action: manipulation;
+        touch-action: none;
       }
 
       /* Floating hearts background */
@@ -41,28 +55,30 @@
         height: 100%;
         pointer-events: none;
         z-index: 1;
+        overflow: hidden;
       }
 
       .heart {
         position: absolute;
-        font-size: 20px;
+        font-size: 18px;
         opacity: 0;
-        animation: float-up 8s infinite ease-in-out;
+        animation: float-up 10s linear infinite;
+        will-change: transform, opacity;
       }
 
       @keyframes float-up {
         0% {
-          transform: translateY(100vh) translateX(0) rotate(0deg);
+          transform: translateY(calc(100vh + 20px)) translateX(0) rotate(0deg);
           opacity: 0;
         }
-        10% {
-          opacity: 0.3;
+        5% {
+          opacity: 0.4;
         }
-        90% {
-          opacity: 0.3;
+        95% {
+          opacity: 0.4;
         }
         100% {
-          transform: translateY(-100px) translateX(var(--drift)) rotate(360deg);
+          transform: translateY(-50px) translateX(var(--drift)) rotate(360deg);
           opacity: 0;
         }
       }
@@ -72,23 +88,26 @@
         position: relative;
         z-index: 2;
         text-align: center;
-        padding: 20px;
-        max-width: 500px;
-        width: 90%;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       /* Screen stages */
       .screen {
         opacity: 0;
         pointer-events: none;
-        transition: opacity 0.8s ease;
+        transition: opacity 0.6s ease;
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
         width: 100%;
-        max-width: 500px;
-        padding: 20px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 30px 20px;
       }
 
       .screen.active {
@@ -99,50 +118,48 @@
       /* Stage 1: Initial button */
       .greeting {
         font-family: "Caveat", cursive;
-        font-size: 2.5rem;
+        font-size: clamp(2rem, 8vw, 2.5rem);
         color: #ff6b9d;
         margin-bottom: 20px;
         text-shadow: 2px 2px 10px rgba(255, 107, 157, 0.3);
       }
 
       .message {
-        font-size: 1.2rem;
+        font-size: clamp(1rem, 4.5vw, 1.2rem);
         color: #d6537d;
         margin-bottom: 40px;
         line-height: 1.6;
+        padding: 0 10px;
       }
 
       .hug-button {
         background: linear-gradient(135deg, #ff8fab 0%, #ff6b9d 100%);
         border: none;
-        padding: 18px 45px;
+        padding: 16px 40px;
         border-radius: 50px;
-        font-size: 1.3rem;
+        font-size: clamp(1.1rem, 5vw, 1.3rem);
         color: white;
         cursor: pointer;
         box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
-        transition: all 0.3s ease;
+        transition: all 0.2s ease;
         font-family: "Quicksand", sans-serif;
         font-weight: 600;
-      }
-
-      .hug-button:hover {
-        transform: scale(1.08);
-        box-shadow: 0 15px 40px rgba(255, 107, 157, 0.6);
+        touch-action: manipulation;
       }
 
       .hug-button:active {
-        transform: scale(1.02);
+        transform: scale(0.95);
       }
 
       /* Stage 2 & 3: Reveal texts */
       .reveal-text {
         font-family: "Caveat", cursive;
-        font-size: 2.2rem;
+        font-size: clamp(1.8rem, 7vw, 2.2rem);
         color: #ff6b9d;
         margin-bottom: 30px;
         text-shadow: 2px 2px 10px rgba(255, 107, 157, 0.3);
         animation: fadeInScale 0.8s ease forwards;
+        padding: 0 20px;
       }
 
       @keyframes fadeInScale {
@@ -158,11 +175,12 @@
 
       .big-reveal {
         font-family: "Caveat", cursive;
-        font-size: 3rem;
+        font-size: clamp(2rem, 8vw, 3rem);
         color: #ff6b9d;
         margin-bottom: 30px;
         text-shadow: 3px 3px 15px rgba(255, 107, 157, 0.5);
         animation: bounceIn 1s ease forwards;
+        padding: 0 20px;
       }
 
       @keyframes bounceIn {
@@ -184,11 +202,12 @@
 
       /* Stage 4: Hold instruction */
       .instruction-text {
-        font-size: 1.3rem;
+        font-size: clamp(1.1rem, 4.8vw, 1.3rem);
         color: #d6537d;
         margin-bottom: 30px;
         line-height: 1.8;
         animation: fadeInUp 0.8s ease forwards;
+        padding: 0 20px;
       }
 
       @keyframes fadeInUp {
@@ -204,11 +223,11 @@
 
       /* Hold button */
       .hold-area {
-        width: 200px;
-        height: 200px;
-        margin: 40px auto;
+        width: clamp(160px, 45vw, 200px);
+        height: clamp(160px, 45vw, 200px);
+        margin: 20px auto;
         position: relative;
-        cursor: pointer;
+        touch-action: none;
       }
 
       .hold-button {
@@ -217,15 +236,16 @@
         border-radius: 50%;
         background: linear-gradient(135deg, #ff8fab 0%, #ff6b9d 100%);
         border: none;
-        font-size: 3rem;
+        font-size: clamp(2.5rem, 12vw, 3rem);
         cursor: pointer;
         box-shadow: 0 15px 40px rgba(255, 107, 157, 0.5);
-        transition: all 0.3s ease;
+        transition: transform 0.1s ease;
         position: relative;
         z-index: 2;
         display: flex;
         align-items: center;
         justify-content: center;
+        touch-action: none;
       }
 
       .hold-button:active {
@@ -237,8 +257,8 @@
         position: absolute;
         top: -10px;
         left: -10px;
-        width: 220px;
-        height: 220px;
+        width: calc(100% + 20px);
+        height: calc(100% + 20px);
         transform: rotate(-90deg);
         z-index: 1;
       }
@@ -246,15 +266,15 @@
       .progress-ring-circle {
         fill: none;
         stroke: #ffb3d9;
-        stroke-width: 8;
+        stroke-width: 6;
         stroke-linecap: round;
         filter: drop-shadow(0 0 10px rgba(255, 179, 217, 0.8));
-        transition: stroke-dashoffset 0.1s linear;
+        transition: stroke-dashoffset 0.05s linear;
       }
 
       /* Pulsing glow effect */
       .hold-button.holding {
-        animation: pulseGlow 1s infinite;
+        animation: pulseGlow 1.5s infinite;
       }
 
       @keyframes pulseGlow {
@@ -271,11 +291,21 @@
         }
       }
 
+      /* Hold hint text */
+      .hold-hint {
+        font-size: clamp(0.85rem, 3.8vw, 0.95rem);
+        color: #ff8fab;
+        margin-top: 20px;
+        opacity: 0.8;
+        font-style: italic;
+        padding: 0 20px;
+      }
+
       /* Video screen */
       .video-container {
         position: relative;
-        width: 100%;
-        max-width: 350px;
+        width: 90%;
+        max-width: min(350px, 85vw);
         margin: 0 auto;
         animation: videoAppear 1s ease forwards;
       }
@@ -294,12 +324,11 @@
       .video-wrapper {
         position: relative;
         aspect-ratio: 9 / 16;
-        border-radius: 30px;
+        border-radius: 20px;
         overflow: hidden;
         box-shadow:
           0 0 40px rgba(255, 107, 157, 0.4),
-          0 20px 60px rgba(255, 107, 157, 0.3),
-          inset 0 0 20px rgba(255, 255, 255, 0.1);
+          0 20px 60px rgba(255, 107, 157, 0.3);
         border: 3px solid rgba(255, 179, 217, 0.5);
         background: linear-gradient(135deg, #ff8fab 0%, #ff6b9d 100%);
       }
@@ -344,37 +373,37 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 120%;
-        height: 120%;
+        width: 115%;
+        height: 115%;
         pointer-events: none;
         z-index: 2;
       }
 
       .deco-heart {
         position: absolute;
-        font-size: 30px;
+        font-size: clamp(20px, 6vw, 28px);
         animation: floatAround 4s infinite ease-in-out;
         opacity: 0.6;
       }
 
       .deco-heart:nth-child(1) {
-        top: -20px;
-        left: -20px;
+        top: -15px;
+        left: -15px;
         animation-delay: 0s;
       }
       .deco-heart:nth-child(2) {
-        top: -20px;
-        right: -20px;
+        top: -15px;
+        right: -15px;
         animation-delay: 0.5s;
       }
       .deco-heart:nth-child(3) {
-        bottom: -20px;
-        left: -20px;
+        bottom: -15px;
+        left: -15px;
         animation-delay: 1s;
       }
       .deco-heart:nth-child(4) {
-        bottom: -20px;
-        right: -20px;
+        bottom: -15px;
+        right: -15px;
         animation-delay: 1.5s;
       }
 
@@ -390,13 +419,14 @@
 
       .video-message {
         font-family: "Caveat", cursive;
-        font-size: 2rem;
+        font-size: clamp(1.6rem, 6vw, 2rem);
         color: #ff6b9d;
         text-align: center;
-        margin-top: 30px;
+        margin-top: 25px;
         text-shadow: 2px 2px 10px rgba(255, 107, 157, 0.3);
         animation: fadeInUp 1s ease 0.5s forwards;
         opacity: 0;
+        padding: 0 15px;
       }
 
       .replay-button {
@@ -404,26 +434,26 @@
         border: none;
         padding: 12px 30px;
         border-radius: 50px;
-        font-size: 1rem;
+        font-size: clamp(0.95rem, 4vw, 1rem);
         color: white;
         cursor: pointer;
         box-shadow: 0 5px 20px rgba(255, 179, 217, 0.4);
-        transition: all 0.3s ease;
+        transition: transform 0.2s ease;
         font-family: "Quicksand", sans-serif;
         font-weight: 500;
         margin-top: 20px;
         animation: fadeInUp 1s ease 1s forwards;
         opacity: 0;
+        touch-action: manipulation;
       }
 
-      .replay-button:hover {
-        transform: scale(1.05);
-        box-shadow: 0 8px 25px rgba(255, 179, 217, 0.6);
+      .replay-button:active {
+        transform: scale(0.95);
       }
 
       /* Sparkle effects */
       .sparkle {
-        position: absolute;
+        position: fixed;
         width: 4px;
         height: 4px;
         background: white;
@@ -431,6 +461,7 @@
         pointer-events: none;
         animation: sparkleFloat 2s ease-out forwards;
         box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        z-index: 1000;
       }
 
       @keyframes sparkleFloat {
@@ -440,47 +471,7 @@
         }
         100% {
           opacity: 0;
-          transform: translateY(-100px) scale(0);
-        }
-      }
-
-      /* Responsive */
-      @media (max-width: 480px) {
-        .greeting {
-          font-size: 2rem;
-        }
-
-        .reveal-text {
-          font-size: 1.8rem;
-        }
-
-        .big-reveal {
-          font-size: 2.5rem;
-        }
-
-        .message,
-        .instruction-text {
-          font-size: 1.1rem;
-        }
-
-        .hold-area {
-          width: 180px;
-          height: 180px;
-        }
-
-        .progress-ring {
-          width: 200px;
-          height: 200px;
-        }
-
-        .video-message {
-          font-size: 1.7rem;
-        }
-      }
-
-      @media (max-width: 360px) {
-        .video-container {
-          max-width: 280px;
+          transform: translateY(-80px) scale(0);
         }
       }
     </style>
@@ -508,9 +499,9 @@
 
       <!-- Stage 3: Big reveal -->
       <div class="screen" id="stage3">
-        <div class="big-reveal">A hug for you on Hug Day!!!</div>
+        <div class="big-reveal">A HUG on Hug Day!!!</div>
         <button class="hug-button" onclick="goToStage4()">
-          Hug for you<3 🤗
+          I want my hug! 🤗
         </button>
       </div>
 
@@ -520,30 +511,17 @@
           Place your finger on the screen<br />and don't lift it.
         </div>
         <div class="hold-area">
-          <svg class="progress-ring">
+          <svg class="progress-ring" id="progressRing">
             <circle
               class="progress-ring-circle"
               id="progressCircle"
-              stroke-dasharray="660"
-              stroke-dashoffset="660"
-              cx="110"
-              cy="110"
-              r="105"
+              cx="50%"
+              cy="50%"
             />
           </svg>
-          <button
-            class="hold-button"
-            id="holdButton"
-            onmousedown="startHold(event)"
-            onmouseup="stopHold()"
-            onmouseleave="stopHold()"
-            ontouchstart="startHold(event)"
-            ontouchend="stopHold()"
-            ontouchcancel="stopHold()"
-          >
-            💗
-          </button>
+          <button class="hold-button" id="holdButton">💗</button>
         </div>
+        <div class="hold-hint">Hold for 3 seconds to receive your hug</div>
       </div>
 
       <!-- Stage 5: Video screen -->
@@ -557,7 +535,7 @@
           </div>
           <div class="video-wrapper">
             <video id="hugVideo" playsinline autoplay loop muted>
-              <source src="video/cutiecouple.mp4" type="video/mp4" />
+              <source src="img/cutiecouple.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
@@ -574,52 +552,59 @@
       let holdProgress = 0;
       let holdDuration = 3000; // 3 seconds
       let holdInterval = null;
+      let isHolding = false;
 
-      // Create floating hearts
+      // Create floating hearts with consistent intervals
       function createFloatingHearts() {
         const container = document.getElementById("heartsContainer");
         const heartSymbols = ["💗", "💖", "💕", "💓"];
 
-        for (let i = 0; i < 15; i++) {
-          setTimeout(() => {
-            const heart = document.createElement("div");
-            heart.className = "heart";
-            heart.textContent =
-              heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
-            heart.style.left = Math.random() * 100 + "%";
-            heart.style.setProperty(
-              "--drift",
-              (Math.random() - 0.5) * 200 + "px",
-            );
-            heart.style.animationDelay = Math.random() * 8 + "s";
-            heart.style.fontSize = Math.random() * 15 + 15 + "px";
-            container.appendChild(heart);
-          }, i * 300);
+        // Create initial batch
+        for (let i = 0; i < 12; i++) {
+          createSingleHeart(container, heartSymbols, i * 800);
         }
+
+        // Continue creating hearts at regular intervals
+        setInterval(() => {
+          createSingleHeart(container, heartSymbols, 0);
+        }, 1200);
+      }
+
+      function createSingleHeart(container, heartSymbols, delay) {
+        setTimeout(() => {
+          const heart = document.createElement("div");
+          heart.className = "heart";
+          heart.textContent =
+            heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+          heart.style.left = Math.random() * 100 + "%";
+          heart.style.setProperty(
+            "--drift",
+            (Math.random() - 0.5) * 150 + "px",
+          );
+          heart.style.fontSize = Math.random() * 8 + 16 + "px";
+          container.appendChild(heart);
+
+          // Remove heart after animation
+          setTimeout(() => heart.remove(), 10000);
+        }, delay);
       }
 
       // Create sparkles
       function createSparkles(element) {
-        for (let i = 0; i < 20; i++) {
+        const rect = element.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        for (let i = 0; i < 15; i++) {
           setTimeout(() => {
             const sparkle = document.createElement("div");
             sparkle.className = "sparkle";
-            const rect = element.getBoundingClientRect();
-            sparkle.style.left =
-              rect.left + rect.width / 2 + (Math.random() - 0.5) * 100 + "px";
-            sparkle.style.top =
-              rect.top + rect.height / 2 + (Math.random() - 0.5) * 100 + "px";
-            sparkle.style.animationDelay = Math.random() * 0.5 + "s";
+            sparkle.style.left = centerX + (Math.random() - 0.5) * 80 + "px";
+            sparkle.style.top = centerY + (Math.random() - 0.5) * 80 + "px";
+            sparkle.style.animationDelay = Math.random() * 0.3 + "s";
             document.body.appendChild(sparkle);
             setTimeout(() => sparkle.remove(), 2000);
-          }, i * 50);
-        }
-      }
-
-      // Vibrate on mobile
-      function vibrateDevice(pattern = [200, 100, 200]) {
-        if ("vibrate" in navigator) {
-          navigator.vibrate(pattern);
+          }, i * 40);
         }
       }
 
@@ -633,59 +618,81 @@
           toStage.classList.add("active");
         }, 300);
 
-        // Add more hearts
         addBurstHearts();
       }
 
       function goToStage2() {
-        vibrateDevice([100]);
         createSparkles(event.target);
         switchStage("stage1", "stage2");
       }
 
       function goToStage3() {
-        vibrateDevice([100]);
         createSparkles(event.target);
         switchStage("stage2", "stage3");
       }
 
       function goToStage4() {
-        vibrateDevice([150, 100, 150]);
         createSparkles(event.target);
         switchStage("stage3", "stage4");
+
+        // Initialize progress ring after stage is active
+        setTimeout(initializeProgressRing, 400);
       }
 
       // Add burst of hearts
       function addBurstHearts() {
         const container = document.getElementById("heartsContainer");
-        for (let i = 0; i < 8; i++) {
+        const heartSymbols = ["💗", "💖", "💕", "💓"];
+
+        for (let i = 0; i < 10; i++) {
           setTimeout(() => {
             const heart = document.createElement("div");
             heart.className = "heart";
-            heart.textContent = "💗";
+            heart.textContent =
+              heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
             heart.style.left = Math.random() * 100 + "%";
             heart.style.setProperty(
               "--drift",
-              (Math.random() - 0.5) * 200 + "px",
+              (Math.random() - 0.5) * 180 + "px",
             );
-            heart.style.animationDuration = "5s";
-            heart.style.fontSize = "28px";
+            heart.style.animationDuration = "6s";
+            heart.style.fontSize = Math.random() * 10 + 22 + "px";
             container.appendChild(heart);
-          }, i * 80);
+
+            setTimeout(() => heart.remove(), 6000);
+          }, i * 60);
         }
+      }
+
+      // Initialize progress ring
+      function initializeProgressRing() {
+        const ring = document.getElementById("progressRing");
+        const circle = document.getElementById("progressCircle");
+        const ringSize = document.querySelector(".hold-area").offsetWidth + 20;
+        const radius = ringSize / 2 - 5;
+        const circumference = 2 * Math.PI * radius;
+
+        ring.setAttribute("width", ringSize);
+        ring.setAttribute("height", ringSize);
+        circle.setAttribute("r", radius);
+        circle.style.strokeDasharray = circumference;
+        circle.style.strokeDashoffset = circumference;
       }
 
       // Hold button functionality
       function startHold(event) {
         event.preventDefault();
 
+        if (isHolding) return;
+        isHolding = true;
+
         const button = document.getElementById("holdButton");
         const circle = document.getElementById("progressCircle");
+        const circumference = parseFloat(circle.style.strokeDasharray);
 
         button.classList.add("holding");
         holdProgress = 0;
 
-        const circumference = 660;
         const startTime = Date.now();
 
         holdInterval = setInterval(() => {
@@ -695,29 +702,25 @@
           const offset = circumference - holdProgress * circumference;
           circle.style.strokeDashoffset = offset;
 
-          // Vibrate feedback at intervals
-          if (holdProgress === 0.33 || holdProgress === 0.66) {
-            vibrateDevice([50]);
-          }
-
           if (holdProgress >= 1) {
             completeHold();
           }
-        }, 16); // ~60fps
+        }, 16);
       }
 
       function stopHold() {
+        if (!isHolding) return;
+
         if (holdProgress < 1) {
           clearInterval(holdInterval);
           const button = document.getElementById("holdButton");
           const circle = document.getElementById("progressCircle");
+          const circumference = parseFloat(circle.style.strokeDasharray);
 
           button.classList.remove("holding");
-          circle.style.strokeDashoffset = "660";
+          circle.style.strokeDashoffset = circumference;
           holdProgress = 0;
-
-          // Small vibration for feedback
-          vibrateDevice([30]);
+          isHolding = false;
         }
       }
 
@@ -726,34 +729,35 @@
         const button = document.getElementById("holdButton");
         button.classList.remove("holding");
 
-        // Success vibration
-        vibrateDevice([200, 100, 200, 100, 300]);
-
         // Create massive sparkle effect
         createSparkles(button);
 
         // Add explosion of hearts
         const container = document.getElementById("heartsContainer");
-        for (let i = 0; i < 20; i++) {
+        const heartSymbols = ["💗", "💖", "💕", "💓"];
+
+        for (let i = 0; i < 25; i++) {
           setTimeout(() => {
             const heart = document.createElement("div");
             heart.className = "heart";
-            heart.textContent = ["💗", "💖", "💕", "💓"][
-              Math.floor(Math.random() * 4)
-            ];
+            heart.textContent =
+              heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
             heart.style.left = Math.random() * 100 + "%";
             heart.style.setProperty(
               "--drift",
-              (Math.random() - 0.5) * 250 + "px",
+              (Math.random() - 0.5) * 220 + "px",
             );
-            heart.style.animationDuration = "4s";
-            heart.style.fontSize = Math.random() * 20 + 25 + "px";
+            heart.style.animationDuration = "5s";
+            heart.style.fontSize = Math.random() * 12 + 24 + "px";
             container.appendChild(heart);
-          }, i * 50);
+
+            setTimeout(() => heart.remove(), 5000);
+          }, i * 40);
         }
 
         // Transition to video
         setTimeout(() => {
+          isHolding = false;
           switchStage("stage4", "stage5");
           playVideo();
         }, 500);
@@ -764,7 +768,6 @@
         const video = document.getElementById("hugVideo");
         video.muted = false;
         video.play().catch((err) => {
-          // If autoplay fails, try muted
           video.muted = true;
           video.play();
         });
@@ -772,29 +775,58 @@
 
       // Restart experience
       function restartExperience() {
-        vibrateDevice([100]);
-
-        // Reset video
         const video = document.getElementById("hugVideo");
         video.pause();
         video.currentTime = 0;
 
-        // Reset progress circle
         const circle = document.getElementById("progressCircle");
-        circle.style.strokeDashoffset = "660";
+        if (circle.style.strokeDasharray) {
+          circle.style.strokeDashoffset = circle.style.strokeDasharray;
+        }
 
-        // Go back to start
+        holdProgress = 0;
+        isHolding = false;
+
         switchStage("stage5", "stage1");
       }
 
-      // Initialize
-      createFloatingHearts();
+      // Set up hold button event listeners
+      function setupHoldButton() {
+        const button = document.getElementById("holdButton");
 
-      // Prevent context menu on long press
-      document.addEventListener("contextmenu", (e) => {
-        if (e.target.id === "holdButton") {
+        // Touch events
+        button.addEventListener("touchstart", startHold, { passive: false });
+        button.addEventListener("touchend", stopHold, { passive: false });
+        button.addEventListener("touchcancel", stopHold, { passive: false });
+
+        // Mouse events (for desktop testing)
+        button.addEventListener("mousedown", startHold);
+        button.addEventListener("mouseup", stopHold);
+        button.addEventListener("mouseleave", stopHold);
+      }
+
+      // Prevent scrolling and zooming
+      document.addEventListener(
+        "touchmove",
+        (e) => {
           e.preventDefault();
-        }
+        },
+        { passive: false },
+      );
+
+      document.addEventListener("gesturestart", (e) => {
+        e.preventDefault();
+      });
+
+      // Prevent context menu
+      document.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+      });
+
+      // Initialize
+      window.addEventListener("load", () => {
+        createFloatingHearts();
+        setupHoldButton();
       });
     </script>
   </body>
