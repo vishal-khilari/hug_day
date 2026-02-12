@@ -16,10 +16,17 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        -webkit-tap-highlight-color: transparent;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         -webkit-touch-callout: none;
         -webkit-user-select: none;
         user-select: none;
+        outline: none;
+      }
+
+      button:focus,
+      button:active {
+        outline: none;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
       }
 
       html,
@@ -72,10 +79,10 @@
           opacity: 0;
         }
         5% {
-          opacity: 0.4;
+          opacity: 0.15;
         }
         95% {
-          opacity: 0.4;
+          opacity: 0.15;
         }
         100% {
           transform: translateY(-50px) translateX(var(--drift)) rotate(360deg);
@@ -304,8 +311,8 @@
       /* Video screen */
       .video-container {
         position: relative;
-        width: 90%;
-        max-width: min(350px, 85vw);
+        width: 75%;
+        max-width: min(280px, 70vw);
         margin: 0 auto;
         animation: videoAppear 1s ease forwards;
       }
@@ -419,36 +426,41 @@
 
       .video-message {
         font-family: "Caveat", cursive;
-        font-size: clamp(1.6rem, 6vw, 2rem);
+        font-size: clamp(1.4rem, 5.5vw, 1.8rem);
         color: #ff6b9d;
         text-align: center;
-        margin-top: 25px;
+        margin-top: 20px;
         text-shadow: 2px 2px 10px rgba(255, 107, 157, 0.3);
         animation: fadeInUp 1s ease 0.5s forwards;
         opacity: 0;
-        padding: 0 15px;
+        padding: 0 20px;
       }
 
-      .replay-button {
-        background: linear-gradient(135deg, #ffb3d9 0%, #ff8fab 100%);
-        border: none;
-        padding: 12px 30px;
-        border-radius: 50px;
-        font-size: clamp(0.95rem, 4vw, 1rem);
-        color: white;
+      .click-text {
+        font-size: clamp(0.85rem, 3.5vw, 1rem);
+        color: #ff8fab;
         cursor: pointer;
-        box-shadow: 0 5px 20px rgba(255, 179, 217, 0.4);
-        transition: transform 0.2s ease;
-        font-family: "Quicksand", sans-serif;
-        font-weight: 500;
-        margin-top: 20px;
+        margin-top: 15px;
         animation: fadeInUp 1s ease 1s forwards;
         opacity: 0;
         touch-action: manipulation;
+        font-style: italic;
       }
 
-      .replay-button:active {
-        transform: scale(0.95);
+      /* Stage 6: Final message */
+      .final-message {
+        font-size: clamp(1.05rem, 4.5vw, 1.25rem);
+        color: #d6537d;
+        line-height: 1.8;
+        padding: 0 25px;
+        text-align: center;
+        animation: fadeInUp 1s ease forwards;
+        max-width: 95%;
+      }
+
+      .final-message .bold-text {
+        font-weight: 600;
+        color: #ff6b9d;
       }
 
       /* Sparkle effects */
@@ -521,11 +533,10 @@
           </svg>
           <button class="hold-button" id="holdButton">💗</button>
         </div>
-        <div class="hold-hint">Hold for 3 seconds to receive your hug</div>
       </div>
 
       <!-- Stage 5: Video screen -->
-      <div class="screen" id="stage5">
+      <div class="screen" id="stage5" style="cursor: pointer">
         <div class="video-container">
           <div class="video-hearts">
             <div class="deco-heart">💕</div>
@@ -541,9 +552,17 @@
           </div>
         </div>
         <div class="video-message">Happy Hug Day, my favorite person 💗</div>
-        <button class="replay-button" onclick="restartExperience()">
-          Experience it again? 💕
-        </button>
+        <div class="click-text">click</div>
+      </div>
+
+      <!-- Stage 6: Final message -->
+      <div class="screen" id="stage6">
+        <div class="final-message">
+          If I were there right now, I'd pull you into my arms and not let go
+          for a while.<br /><br />
+          No matter how your day went…
+          <span class="bold-text">You always have a place here.</span>
+        </div>
       </div>
     </div>
 
@@ -559,15 +578,20 @@
         const container = document.getElementById("heartsContainer");
         const heartSymbols = ["💗", "💖", "💕", "💓"];
 
-        // Create initial batch
+        // Create initial batch with random delays
         for (let i = 0; i < 12; i++) {
-          createSingleHeart(container, heartSymbols, i * 800);
+          createSingleHeart(container, heartSymbols, Math.random() * 3000);
         }
 
-        // Continue creating hearts at regular intervals
-        setInterval(() => {
-          createSingleHeart(container, heartSymbols, 0);
-        }, 1200);
+        // Continue creating hearts at random intervals
+        function scheduleNextHeart() {
+          const randomDelay = 800 + Math.random() * 1000; // Random between 0.8-1.8s
+          setTimeout(() => {
+            createSingleHeart(container, heartSymbols, 0);
+            scheduleNextHeart();
+          }, randomDelay);
+        }
+        scheduleNextHeart();
       }
 
       function createSingleHeart(container, heartSymbols, delay) {
@@ -576,16 +600,26 @@
           heart.className = "heart";
           heart.textContent =
             heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
-          heart.style.left = Math.random() * 100 + "%";
-          heart.style.setProperty(
-            "--drift",
-            (Math.random() - 0.5) * 150 + "px",
-          );
+
+          // More random horizontal positioning
+          const randomLeft = Math.random() * 100;
+          heart.style.left = randomLeft + "%";
+
+          // Vary the drift amount more
+          const driftAmount = (Math.random() - 0.5) * 200;
+          heart.style.setProperty("--drift", driftAmount + "px");
+
+          // Random size variation
           heart.style.fontSize = Math.random() * 8 + 16 + "px";
+
+          // Random animation duration for more variety
+          const duration = 8 + Math.random() * 4; // Between 8-12 seconds
+          heart.style.animationDuration = duration + "s";
+
           container.appendChild(heart);
 
           // Remove heart after animation
-          setTimeout(() => heart.remove(), 10000);
+          setTimeout(() => heart.remove(), duration * 1000);
         }, delay);
       }
 
@@ -771,23 +805,33 @@
           video.muted = true;
           video.play();
         });
+
+        // Make entire stage 5 clickable after video plays
+        setTimeout(() => {
+          const stage5 = document.getElementById("stage5");
+          stage5.onclick = goToStage6;
+        }, 1000);
       }
 
-      // Restart experience
-      function restartExperience() {
+      // Go to stage 6
+      function goToStage6() {
+        switchStage("stage5", "stage6");
+
+        // Pause video
         const video = document.getElementById("hugVideo");
         video.pause();
-        video.currentTime = 0;
 
-        const circle = document.getElementById("progressCircle");
-        if (circle.style.strokeDasharray) {
-          circle.style.strokeDashoffset = circle.style.strokeDasharray;
-        }
+        // Set up click handler for stage 6
+        setTimeout(() => {
+          const stage6 = document.getElementById("stage6");
+          stage6.style.cursor = "pointer";
+          stage6.onclick = redirectToWebsite;
+        }, 500);
+      }
 
-        holdProgress = 0;
-        isHolding = false;
-
-        switchStage("stage5", "stage1");
+      // Redirect to website
+      function redirectToWebsite() {
+        window.location.href = "https://formyloveprishu.vercel.app/";
       }
 
       // Set up hold button event listeners
